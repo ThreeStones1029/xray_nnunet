@@ -15,7 +15,7 @@ tags:	图像分割							#标签
 
 ## 1.1.主要要求
 
-分割椎体侧位X线片，主要分割**椎体、椎弓根、肋骨**，植入物，分割示例如下图：
+分割椎体侧位X线片，主要分割==椎体、椎弓根、肋骨==，植入物，分割示例如下图：
 
 <img src="https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231127113828966.png" alt="image-20231127113828966" style="zoom: 33%;" />
 
@@ -90,16 +90,58 @@ conda create -n nnunet python==3.9
 
 （2）安装torch
 
+需要先进入虚拟环境 conda activate nnunet
+~~pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113~~
+
+==更新==
+
+==代码需要用到torch._dynamo，在官方上发现它只在2.0.0以上版本出现，所以我安装了2.0.0。如果你的显卡驱动不支持2.0.0.可以先更新驱动，2.0.0.最低cuda版本11.7==
+
+如果你的系统也是ubuntu，可以
+
 ~~~bash
-# 需要先进入虚拟环境 conda activate nnunet
-pip install torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
+sudo apt-get install nvidia-driver-版本号
+最后重启
+~~~
+
+或者直接在软件中更新即可
+
+![image-20231128222843600](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231128222843600.png)
+
+我更新驱动后
+
+![image-20231128221313910](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231128221313910.png)
+
+如果你是windows可以去官网查看一下你的显卡型号，选择支持的版本
+
+[英伟达官网](https://www.nvidia.cn/Download/index.aspx?lang=cn)
+
+安装完后，重新安装命令（Ps可以重新删除那个环境，避免包版本冲突）
+
+~~~bash
+# 删除环境
+conda remove -n nnunet --all
+# 重新新建环境
+conda create -n nnunet python==3.9
+conda activate nnunet
+pip install torch==2.0.0 torchvision==0.15.1 torchaudio==2.0.1 
+~~~
+
+如果还是不行可以更新自己的cuda版本，我的cuda和cudnn版本如下
+
+~~~bash
+cuda11.7
+cudnn8.5.0
 ~~~
 
 （3）安装其余包
 
-如果你安装的torch版本小于2.0.0，需要修改pyproject.toml的第33行
+~~如果你安装的torch版本小于2.0.0，需要修改pyproject.toml的第33行
+torch>=2.0.0修改为你安装的版本号（若你安装的版本号大于2.0.0不需要修改），由于我安装的1.12.1所以我修改为了torch>=1.12.1~~
 
-torch>=2.0.0修改为你安装的版本号（若你安装的版本号大于2.0.0不需要修改），由于我安装的1.12.1所以我修改为了torch>=1.12.1
+==更新==
+
+==可以不修改了，torch>=2.0.0即可==
 
 ~~~bash
 # 在根目录下
@@ -141,6 +183,8 @@ nnUNet_raw = "你新建的这个对应文件夹路径"
 nnUNet_preprocessed = "新建的这个对应文件夹路径"
 nnUNet_results = "新建的这个对应文件夹路径"
 ~~~
+
+==这里路径写绝对路径==
 
 ## 3.3.数据集制作
 
@@ -204,7 +248,7 @@ class DataFormatConversion:
 
 
 if __name__ == "__main__":
-    data_format_conversion = DataFormatConversion(images_folder="nnunetv2/nnUNet_raw/CHASEDB1",save_images_folder="nnunetv2/nnUNet_raw/CHASEDB1")
+    data_format_conversion = 		DataFormatConversion(images_folder="nnunetv2/nnUNet_raw/CHASEDB1",                                  save_images_folder="nnunetv2/nnUNet_raw/CHASEDB1")
     data_format_conversion.jpgs2pngs()
 ~~~
 
@@ -218,28 +262,268 @@ python nnunetv2/tools/data_format_preprocess.py
 
 ### 3.4.3.数据集划分
 
-因为只做测试，可以手动划分一下，原数据集总共84张图片，包括28张原图，每一张原图对应两张mask（两名医生分别标注了一张），总共56张mask，我们选任意一个人的标注就行，我统一选的1st那个人标注的
+因为只做测试，可以手动划分一下，原数据集总共84张图片，包括28张原图，每一张原图对应两张mask（两名医生分别标注了一张），总共56张mask，我们选任意一个人的标注就行，我统一选的1st那个人标注的。在CHASEDB1文件夹下新建train以及val文件夹，里面分别再新建images以及masks，其中images放原图，masks放医生标注的图。这里我手动选择了前20张原图作为训练集images，对应的mask作为训练集masks，剩下的作为测试集的images和masks。
 
 ~~~bash
-images_Tr为训练集原图
-images_Ts为测试集原图
-labels_Tr为训练集标签
-labels_Ts为测试集标签
+├── train
+│   ├── images
+│   └── masks
+└── val
+    ├── images
+    └── masks
 ~~~
-
-![image-20231127200720406](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231127200720406.png)
 
 训练集如下图
 
-![image-20231127221927351](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231127221927351.png)
+![image-20231129165927328](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231129165927328.png)
 
 训练集mask
 
-![image-20231127213212254](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231127213212254.png)
+![image-20231129165953742](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231129165953742.png)
 
-### 3.4.4.json文件生成
+### 3.4.4.数据重命名
+
+mask与image生成json时，名字要相同，可以手动把mask的名字改成和image一样，删除"_1stHO"即可
+
+例如"Image_01L_1stHO.png"修改为"Image_01L.png"
+
+也可以用代码修改
+
+~~~python
+def rename_images(images_folder):
+    for root, dirs, files in os.walk(images_folder):
+        for file in files:
+            new_filename = file.split('_')[0] + '_' + file.split('_')[1] + ".png"
+            os.rename(os.path.join(root, file),os.path.join(root, new_filename))
+~~~
+
+### 3.4.5.数据转为0，255
+
+CHASEDB1数据集mask为0，1，其实已经满足需求，但为了后续方便使用，这里我们尽量不做大的改动
+
+另外写份代码将0，1的mask转为0，255的mask。
+
+转换代码
+
+~~~python
+import os
+from PIL import Image
+import numpy as np
 
 
+class MasksPreprocess:
+    def __init__(self, images_folder) -> None:
+        self.images_folder = images_folder
+
+    
+    def conver_to_binary_images(self):
+        """把label转换为二值图像,也即只有0, 255两个值"""
+        for root, dirs, files in os.walk(self.images_folder):
+            for file in files:
+                img = Image.open(os.path.join(root, file))
+                img_array = np.array(img)
+                binary_array = np.where(img_array == 0, 0, 255)
+                binary_img = Image.fromarray(binary_array.astype(np.uint8))
+                binary_img.save(os.path.join(root, file))
+
+if __name__ == "__main__":
+    Data_preprocess = MasksPreprocess("masks的路径") # 测试集训练集的mask都需要
+    Data_preprocess.conver_to_binary_images()
+~~~
+
+### 3.4.6.json文件生成
+
+我们需要生成数据集的信息，同时把mask0,255转为0，1的格式
+
+需要修改dataset_conversion/Dataset120_RoadSegmentation.py
+
+修改后的代码可以到这下载，主要就是修改了一些文件路径。
+
+
+
+运行修改后的Dataset120_RoadSegmentation.py生成Dataset100_CHASEDB1文件夹。
+
+![image-20231129171055805](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231129171055805.png)
+
+### 3.4.7.生成预处理后的文件
+
+这里的DATASET_ID就是我们的数据集Dataset100_CHASEDB1名字的id，也即100
+
+~~~bash
+nnUNetv2_plan_and_preprocess -d DATASET_ID --verify_dataset_integrity
+~~~
+
+也即运行
+
+~~~bash
+nnUNetv2_plan_and_preprocess -d 100 --verify_dataset_integrity
+~~~
+
+### 3.4.8.开始训练
+
+如果上一步没有问题，我们就可以开始训练了
+
+~~~bash
+nnUNetv2_train DATASET_NAME_OR_ID UNET_CONFIGURATION FOLD
+~~~
+
+DATASET_NAME_OR_ID即为100，UNET_CONFIGURATION我们只用2dunet，就填2d, FOLD为交叉验证，我们这里只训练一趟就行，填0就可以。运行以下命令就行
+
+~~~bash
+nnUNetv2_train 100 2d 0
+~~~
+
+正常的话就可以训练了，默认训练1000趟，可以修改nnunetv2/training/nnUNetTrainer/nnUNetTrainer.py的第147行修改训练迭代次数。
+
+![image-20231129172756441](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231129172756441.png)
+
+会实时生成训练过程loss和dice曲线，在nnUNet_results/Dataset100_CHASEDB1/nnUNetTrainer__nnUNetPlans__2d/fold_0可以看到
+
+![image-20231129223302548](https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/image-20231129223302548.png)
+
+### 3.4.9.预测
+
+可以同时看看当前预测效果，预测命令
+
+**如果想在模型训练完之前查看结果，可以把model_best.pth复制一个重命名为model_final.pth**，因为默认推理文件选的model_final推理
+
+~~~bash
+nnUNetv2_predict -i nnunetv2/nnUNet_raw/Dataset100_CHASEDB1/imagesTs -o nnunetv2/nnUNet_predict -d 100 -p nnUNetPlans -c 2d -f 0 --save_probabilities
+~~~
+
+---
+
+-i 后面为验证集路径
+
+-o 后面为预测结果保存的路径
+
+-d 后面为数据集id
+
+-p 表示训练计划，这个是前面生成的会在nnUnet_preprocessed/Dataset100_CHASEDB1/nnUNetPlan.json
+
+-c 2d 为训练时使用的网络架构
+
+-f 0 表示选第0折的模型来推理
+
+--save_probabilities 表示保存结果的小数形式
+
+---
+
+预测结果是0，1的图需要查看的话，需要自己写代码转换为0，255的mask
+
+~~~python
+import os
+from PIL import Image
+import numpy as np
+
+
+class MasksPreprocess:
+    def __init__(self, images_folder) -> None:
+        self.images_folder = images_folder
+
+    
+    def conver_to0_255images(self):
+        """把label转换为二值图像,也即只有0, 255两个值"""
+        for root, dirs, files in os.walk(self.images_folder):
+            for file in files:
+                if file.endswith(".png"):
+                    img = Image.open(os.path.join(root, file))
+                    img_array = np.array(img)
+                    binary_array = np.where(img_array == 0, 0, 255)
+                    binary_img = Image.fromarray(binary_array.astype(np.uint8))
+                    binary_img.save(os.path.join(root, file))
+
+if __name__ == "__main__":
+    Data_preprocess = MasksPreprocess("nnunetv2/nnUNet_predict")
+    Data_preprocess.conver_to0_255images()
+~~~
+
+Image_11L.png预测与真实对比，可以看到在10多轮时模型结果已经不错
+<div style="display:flex; justify-content:center; align-items:center; text-align:center;">      
+    <div style="flex: 1; margin: 10px; text-align:center;">         
+        <img src="https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/1d3b3af46573420d827e8bb4080af3b.png" alt="Image 1" style="max-width:100%; height:auto; display:inline-block;">         
+        <p>predict</p>     
+    </div>      
+    <div style="flex: 1; margin: 10px; text-align:center;">         
+        <img src="https://cdn.jsdelivr.net/gh/ThreeStones1029/blogimages/img/7e394b0d3e6c9de46dd1ad19b8ad8b0.png" alt="Image 2" style="max-width:100%; height:auto; display:inline-block;">         
+        <p>ground truth</p>     
+    </div>  
+</div>
+
+### 3.4.10.评估
+
+评估代码还没有仔细看，官网没有提供这部分的命令，我们先可以自己写一个看看效果，注意需要评估同一种类型，假如真实的的是0，255mask则预测也需要是0，255的mask
+
+~~~python
+import cv2
+import numpy as np
+import os
+import glob
+ 
+
+class DiceEvaluation:
+    def __init__(self, GT_folder_path, Pre_floder_path):
+        self.GT_folder_path = GT_folder_path
+        self.Pre_floder_path = Pre_floder_path
+
+
+    def gen_imgs_path_list(self, image_folder):
+        imgs_path = glob.glob(os.path.join(image_folder, '*.png')) 
+        return imgs_path
+
+
+    def calculate_image_dice(self, gt_img_path, pre_img_path):
+        """
+        计算两张二值化图片的Dice系数
+        :param gt_img_path: 真实二值化图片路径
+        :param pre_img_path: 预测二值化图片路径
+        :return: Dice系数
+        """
+        # 读取二值化图片
+        gt = cv2.imread(gt_img_path, cv2.IMREAD_GRAYSCALE)
+        pre = cv2.imread(pre_img_path, cv2.IMREAD_GRAYSCALE)
+
+        # 计算交集和并集
+        intersection = np.logical_and(gt, pre)
+        union = np.logical_or(gt, pre)
+
+        # 计算Dice系数
+        dice_coefficient = (2.0 * intersection.sum()) / (gt.sum() + pre.sum())
+
+        return dice_coefficient
+
+
+    def calculate_images_mean_dice(self):
+        sum_dice = 0
+        
+        gt_files = self.gen_imgs_path_list(self.GT_folder_path) 
+        pre_files = self.gen_imgs_path_list(self.Pre_floder_path)
+        
+        try:
+            if len(gt_files) != len(pre_files):
+                raise ValueError("Check that the number of true and predicted images are the same")
+        except ValueError as e:
+            print(f"error:{e}")
+
+        num_imgs = len(gt_files)
+        
+        for _ in range(num_imgs):
+            file_name = os.path.basename(gt_files[_])
+            gt_img_path = os.path.join(self.GT_folder_path, file_name)
+            pre_img_path = os.path.join(self.Pre_floder_path, file_name)
+            dice = self.calculate_image_dice(gt_img_path, pre_img_path)
+            print(file_name, dice)
+            sum_dice += dice
+        return sum_dice / num_imgs
+
+
+if __name__ == "__main__":
+    # 计算Dice系数
+    pre_gt_eval = DiceEvaluation("nnunetv2/nnUNet_raw/Dataset100_CHASEDB1/labelsTs",
+                                 "nnunetv2/nnUNet_predict")
+    mean_dice = pre_gt_eval.calculate_images_mean_dice()
+    print(f"Mean Dice is: {mean_dice}")
+~~~
 
 
 
@@ -247,7 +531,7 @@ labels_Ts为测试集标签
 
 ### 3.5.1.数据集制作
 
-待写
+明天可以开始准备做X线片的的分割数据集
 
 # 四、参考资料
 
@@ -257,5 +541,12 @@ labels_Ts为测试集标签
 
 [3.CHASEDB1眼底数据集地址](https://aistudio.baidu.com/datasetdetail/81247)
 
-[4.我的代码github地址](https://github.com/ThreeStones1029/xray_nnunet)
+[4.pytorch官网](https://pytorch.org/get-started/previous-versions/)
 
+[5.英伟达官网](https://www.nvidia.cn/Download/index.aspx?lang=cn)
+
+[6.我的代码github地址](https://github.com/ThreeStones1029/xray_nnunet)
+
+[7.nnUnet v2项目学习记录，训练自定义模型（不是Unet）](https://zhuanlan.zhihu.com/p/623506774)
+
+[8.nnUNetv2训练二维图像数据集](https://blog.csdn.net/Halloween111/article/details/130928829)
