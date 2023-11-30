@@ -1,0 +1,14 @@
+{
+    "channel_names": {
+        "0": "R",
+        "1": "G",
+        "2": "B"
+    },
+    "labels": {
+        "background": 0,
+        "eye_texture": 1
+    },
+    "numTraining": 20,
+    "file_ending": ".png",
+    "name": "Dataset100_CHASEDB1"
+}

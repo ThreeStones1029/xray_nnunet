@@ -1,0 +1,132 @@
+[
+    {
+        "train": [
+            "Image_01L",
+            "Image_01R",
+            "Image_02L",
+            "Image_03L",
+            "Image_03R",
+            "Image_04L",
+            "Image_04R",
+            "Image_05R",
+            "Image_06L",
+            "Image_06R",
+            "Image_07L",
+            "Image_08L",
+            "Image_08R",
+            "Image_09R",
+            "Image_10L",
+            "Image_10R"
+        ],
+        "val": [
+            "Image_02R",
+            "Image_05L",
+            "Image_07R",
+            "Image_09L"
+        ]
+    },
+    {
+        "train": [
+            "Image_01R",
+            "Image_02L",
+            "Image_02R",
+            "Image_03L",
+            "Image_03R",
+            "Image_04L",
+            "Image_04R",
+            "Image_05L",
+            "Image_05R",
+            "Image_06R",
+            "Image_07R",
+            "Image_08L",
+            "Image_09L",
+            "Image_09R",
+            "Image_10L",
+            "Image_10R"
+        ],
+        "val": [
+            "Image_01L",
+            "Image_06L",
+            "Image_07L",
+            "Image_08R"
+        ]
+    },
+    {
+        "train": [
+            "Image_01L",
+            "Image_01R",
+            "Image_02L",
+            "Image_02R",
+            "Image_03L",
+            "Image_03R",
+            "Image_05L",
+            "Image_05R",
+            "Image_06L",
+            "Image_07L",
+            "Image_07R",
+            "Image_08L",
+            "Image_08R",
+            "Image_09L",
+            "Image_10L",
+            "Image_10R"
+        ],
+        "val": [
+            "Image_04L",
+            "Image_04R",
+            "Image_06R",
+            "Image_09R"
+        ]
+    },
+    {
+        "train": [
+            "Image_01L",
+            "Image_01R",
+            "Image_02L",
+            "Image_02R",
+            "Image_03L",
+            "Image_03R",
+            "Image_04L",
+            "Image_04R",
+            "Image_05L",
+            "Image_06L",
+            "Image_06R",
+            "Image_07L",
+            "Image_07R",
+            "Image_08R",
+            "Image_09L",
+            "Image_09R"
+        ],
+        "val": [
+            "Image_05R",
+            "Image_08L",
+            "Image_10L",
+            "Image_10R"
+        ]
+    },
+    {
+        "train": [
+            "Image_01L",
+            "Image_02R",
+            "Image_04L",
+            "Image_04R",
+            "Image_05L",
+            "Image_05R",
+            "Image_06L",
+            "Image_06R",
+            "Image_07L",
+            "Image_07R",
+            "Image_08L",
+            "Image_08R",
+            "Image_09L",
+            "Image_09R",
+            "Image_10L",
+            "Image_10R"
+        ],
+        "val": [
+            "Image_01R",
+            "Image_02L",
+            "Image_03L",
+            "Image_03R"
+        ]
+    }
+]
