@@ -4,7 +4,7 @@ version: 1.0
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-09 11:29:36
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 14:33:05
+LastEditTime: 2023-12-10 14:52:42
 '''
 import os
 import time
@@ -71,7 +71,7 @@ class GEN_CUT_DRRMASK_DATASET:
 
             
 def main():
-    dataset = GEN_CUT_DRRMASK_DATASET(data_root_path="data_test", has_pedicle=True, APorLA_orientation="AP", is_vis=True)
+    dataset = GEN_CUT_DRRMASK_DATASET(data_root_path="data", has_pedicle=True, APorLA_orientation="AP", is_vis=True)
     dataset.create_dataset()
 
 
