@@ -4,7 +4,7 @@ version:
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-08 20:24:16
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-09 21:09:30
+LastEditTime: 2023-12-10 20:46:59
 '''
 from gen_json import DatasetJsonTools
 import numpy as np
@@ -86,6 +86,10 @@ def compute_min_bbox_coverage_mask(mask):
     min_bbox = cv2.boundingRect(contours[0])
 
     return min_bbox
+
+
+def according_detection():
+    pass
 
 
 def get_cut_bbox(bbox, width, heigth, expand_coefficient):

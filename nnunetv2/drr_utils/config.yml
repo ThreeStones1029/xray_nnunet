@@ -1,0 +1,24 @@
+data_root_path: data
+has_pedicle: True
+APorLA_orientation: LA
+is_vis: True
+
+# 3D to 2d parameter
+projection_parameter:
+  sdr: 500,
+  height: 1536,
+  delx: 0.25
+  threshold: 0
+  num_samples: 10
+  AP_rot_range_list : [(80, 100), (170, 190), (170, 190)]
+  AP_trans_range_list : [(-10, 10), (-10, 10), (-10, 10)]
+  LA_rot_range_list: [(-10, 10), (80, 100), (-10, 10)]
+  LA_trans_range_list: [(-10, 10), (-10, 10), (-10, 10)]
+
+# Mode of clipping
+cut_parameter:
+  cut_mode: [detection_center, mask_center]
+  AP_expand_coefficient: 1.5
+  LA_expand_coefficient: 1.2
+    
+

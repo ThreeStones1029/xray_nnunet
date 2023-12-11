@@ -4,7 +4,7 @@ version:
 Author: ShuaiLei
 Date: 2023-12-05 15:46:18
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 14:16:12
+LastEditTime: 2023-12-10 21:51:27
 '''
 from genDRR import genDRR
 from drr_image_postprocess import gen_2D_mask, flipdrr, rot_image
@@ -34,10 +34,12 @@ class GenInitDRRMask:
         self.sdr = 500
         self.height = 1536
         self.delx = 0.25
+        self.threshold = 0
+        self.num_samples = 10
         self.ct_root_path = ct_root_path
         self.APorLA_orientation = APorLA_orientation
         self.save_image_file = save_image_file
-        self.num_samples = 2
+        
 
         if self.APorLA_orientation == "AP":
             self.rot_range_list = [(80, 100), (170, 190), (170, 190)]
@@ -166,7 +168,7 @@ class GenInitDRRMask:
         saveIMG = os.path.join(self.save_image_file, "masks", mask_name)
 
         # generate drr
-        genDRR(self.sdr, self.height, self.delx, rotation, translation, filepath, saveIMG)
+        genDRR(self.sdr, self.height, self.delx, self.threshold, rotation, translation, filepath, saveIMG)
         # generate 2d mask
         gen_2D_mask(saveIMG)
 
@@ -183,7 +185,7 @@ class GenInitDRRMask:
         saveIMG = os.path.join(self.save_image_file, "masks", mask_name)
 
         # generate drr
-        genDRR(self.sdr, self.height, self.delx, rotation, translation, filepath, saveIMG)
+        genDRR(self.sdr, self.height, self.delx, self.threshold, rotation, translation, filepath, saveIMG)
         # generate 2d mask
         gen_2D_mask(saveIMG)  
 
@@ -199,7 +201,7 @@ class GenInitDRRMask:
     def gen_drr(self, ct_name, i, rotation, translation, filepath):
         drr_image_name = ct_name + "_" + str(i) + ".png"
         saveIMG = os.path.join(self.save_image_file, "images", drr_image_name)
-        genDRR(self.sdr, self.height, self.delx, rotation, translation, filepath, saveIMG)
+        genDRR(self.sdr, self.height, self.delx, self.threshold, rotation, translation, filepath, saveIMG)
         
         # 侧位需要顺时针旋转90度
         if self.APorLA_orientation == "LA":

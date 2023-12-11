@@ -4,22 +4,22 @@ version:
 Author: ThreeStones1029 221620010039@hhu.edu.cn
 Date: 2023-12-10 14:12:45
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 14:27:24
+LastEditTime: 2023-12-10 21:49:42
 '''
 import subprocess
 
 
 # 调用ITK
-def windowsgenDRR(sdr, height, delx, rotations, translations, ctDir, saveIMG):
+def windowsgenDRR(sdr, height, delx, threshold, rotation, translation, ctDir, saveIMG):
     # 默认参数
     # 绕X、Y和Z轴的旋转角度（以度为单位）
-    rx = rotations[0]
-    ry = rotations[1]
-    rz = rotations[2]
+    rx = rotation[0]
+    ry = rotation[1]
+    rz = rotation[2]
     # 三维平移向量的分量
-    tx = translations[0]
-    ty = translations[1]
-    tz = translations[2]
+    tx = translation[0]
+    ty = translation[1]
+    tz = translation[2]
 
     # 旋转中心的坐标
     cx = 0
@@ -41,7 +41,7 @@ def windowsgenDRR(sdr, height, delx, rotations, translations, ctDir, saveIMG):
     o2Dx = 0
     o2Dy = 0
 
-    threshold = 0
+    threshold = threshold
     ctDir = ctDir
     drrSave = saveIMG
 

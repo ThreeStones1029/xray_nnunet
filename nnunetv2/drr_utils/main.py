@@ -4,10 +4,12 @@ version: 1.0
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-09 11:29:36
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 14:52:42
+LastEditTime: 2023-12-10 21:37:50
 '''
 import os
 import time
+import argparse
+import yaml
 from gen_pedicle import GenPedicles
 from gen_init_dataset import GenInitDRRMask
 from gen_cut_dataset import cut_drrs_and_masks
@@ -71,8 +73,32 @@ class GEN_CUT_DRRMASK_DATASET:
 
             
 def main():
-    dataset = GEN_CUT_DRRMASK_DATASET(data_root_path="data", has_pedicle=True, APorLA_orientation="AP", is_vis=True)
+    dataset = GEN_CUT_DRRMASK_DATASET(data_root_path="data", has_pedicle=True, APorLA_orientation="LA", is_vis=True)
     dataset.create_dataset()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="these py file will be used to gen drrs and masks")
+    parser.add_argument('--config', default='config.yml', help='Path to the YAML configuration file')
+    args = parser.parse_args()
+    return args
+
+
+def read_config_file(config_path):
+    with open(config_path, 'r') as file:
+        config = yaml.safe_load(file)
+    return config
+
+def main():
+    args = parse_args()
+    config = read_config_file(args.config)
+
+    # Accessing values from the YAML file
+    input_file_path = config['input_file_path']
+    output_file_path = config['output_file_path']
+    algorithm_param1 = config['algorithm_config']['param1']
+    algorithm_param2 = config['algorithm_config']['param2']
+    algorithm_param3 = config['algorithm_config']['param3']
 
 
 if __name__ == "__main__":

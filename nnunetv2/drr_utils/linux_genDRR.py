@@ -4,12 +4,12 @@ version:
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-05 15:51:28
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 14:10:26
+LastEditTime: 2023-12-10 21:49:16
 '''
 from ctypes import cdll, c_int, c_char_p, c_float
 
 
-def linuxgenDRR(sdr, height, delx, rotation, translation, ctDir, saveIMG):
+def linuxgenDRR(sdr, height, delx, threshold, rotation, translation, ctDir, saveIMG):
     # 绕X、Y和Z轴的旋转角度（以度为单位）
     rx = rotation[0]
     ry = rotation[1]
@@ -46,7 +46,7 @@ def linuxgenDRR(sdr, height, delx, rotation, translation, ctDir, saveIMG):
     # 较高的阈值：
     # 将过滤掉原始 CT 数据中的低密度区域，只保留高密度区域。
     # 这可能导致生成的 DRR 图像中显示更强的骨骼结构，但可能丢失一些低密度的软组织信息。
-    threshold = -400
+    threshold = threshold
 
     # CT文件位置，要求.nii.gz
     ct_file_path = ctDir
