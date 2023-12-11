@@ -4,7 +4,7 @@ version:
 Author: ShuaiLei
 Date: 2023-12-07 16:10:44
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-07 21:28:26
+LastEditTime: 2023-12-11 22:10:28
 '''
 import json
 from collections import defaultdict
@@ -36,7 +36,6 @@ class coco_annotations:
             self.dataset = {"annotations": annotation_file}
         else:
             print("annotation_file must be path or list")
-
         self.createIndex()
         print('Done (t={:0.2f}s)'.format(time.time()- tic))
 
@@ -50,7 +49,6 @@ class coco_annotations:
             for ann in self.dataset['annotations']:
                 imgToAnns[ann['image_id']].append(ann)
                 img_idToFilename[ann['image_id']] = ann['file_name']
-
         print('index created!')
 
         # create class members
@@ -77,7 +75,6 @@ class coco_annotations:
         for ann in self.dataset["annotations"]:
             if ann["category_id"] not in self.cat_id2cat_name.keys():
                 self.cat_id2cat_name[ann["category_id"]] = ann["category_name"]
-
         return self.cat_id2cat_name
 
 
@@ -91,11 +88,9 @@ def fliter_bbox(detection_result_json, flitered_result_json):
     flitered_result = []
     with open(detection_result_json, "r") as f:
         detection_result = json.load(f)
-
     for ann in detection_result:
         if ann["score"] > 0.6:
             flitered_result.append(ann)
-
     with open(flitered_result_json, "w") as f:
         json.dump(flitered_result, f)
 

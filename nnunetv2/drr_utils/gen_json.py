@@ -4,7 +4,7 @@ version:
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-07 21:28:15
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-09 21:06:09
+LastEditTime: 2023-12-11 16:44:48
 '''
 from datetime import datetime
 import json
@@ -80,7 +80,6 @@ class InitDatasetJson:
         image_info["height"] = height
         image_info["rotation"] = rotation
         image_info["translation"] = translation
-
         self.dataset_images.append(image_info)
 
 
@@ -100,7 +99,6 @@ class InitDatasetJson:
         mask_info["height"] = height
         mask_info["rotation"] = rotation
         mask_info["translation"] = translation
-        
         self.dataset_masks.append(mask_info)
 
 
@@ -119,7 +117,6 @@ class InitDatasetJson:
             self.dataset_cts[self.cts_num - 1]["vertebrae_categoties"].append(vertebrae_category_name)
 
         
-
     def add_masks_categories(self):
         self.dataset_masks_categories = [
                                         {"id": 1,

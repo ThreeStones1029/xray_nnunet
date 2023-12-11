@@ -4,7 +4,7 @@ version:
 Author: ShuaiLei
 Date: 2023-12-05 16:24:26
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-09 15:38:08
+LastEditTime: 2023-12-11 22:10:01
 '''
 import nibabel as nib
 import os
@@ -43,21 +43,16 @@ class GenPedicles:
         vertebrae_path: 单个椎体路径
         vertebrae_catname:椎体类别名
         """
-
         vertebrae = self.load_nii(os.path.join(vertebrae_path, vertebrae_catname + "_all_seg.nii.gz"))
         body = self.load_nii(os.path.join(vertebrae_path, vertebrae_catname + "_body_seg.nii.gz"))
         other = self.load_nii(os.path.join(vertebrae_path, vertebrae_catname + "_other_seg.nii.gz"))
-
         vertebrae_data = vertebrae.get_fdata()
         body_data = body.get_fdata()
         other_data = other.get_fdata()
-
         # 椎弓根 = 整体 - body - other
         pedicle_data = vertebrae_data - body_data - other_data
-
         # 用nii保存,同时需要拷贝原来的坐标系位置
         pedicle = nib.Nifti1Image(pedicle_data, affine=vertebrae.header.get_best_affine())
-
         self.save_nii(pedicle, os.path.join(vertebrae_path, vertebrae_catname + "_pedicle_seg.nii.gz"))
 
 
@@ -67,7 +62,6 @@ class GenPedicles:
         """
         self.get_catname_list(vertebraes_path)
         print(self.catnames)
-
         for catname in self.catnames:
             self.gen_pedicle(vertebraes_path, catname)
 

@@ -4,7 +4,7 @@ version: 1.0
 Author: ThreeStones1029 221620010039@qq.com
 Date: 2023-12-09 11:29:36
 LastEditors: ShuaiLei
-LastEditTime: 2023-12-10 21:37:50
+LastEditTime: 2023-12-11 15:44:35
 '''
 import os
 import time
@@ -89,7 +89,7 @@ def read_config_file(config_path):
         config = yaml.safe_load(file)
     return config
 
-def main():
+def new_main():
     args = parse_args()
     config = read_config_file(args.config)
 
