@@ -6,17 +6,6 @@
  * @LastEditors: ShuaiLei
  * @LastEditTime: 2023-12-10 16:56:47
 -->
----
-layout:     post   				    # 使用的布局（不需要改）
-title:      实例分割 				# 标题 
-subtitle:   nnUnet分割X线片椎骨 #副标题
-date:       2023-12-10 				# 时间
-author:     BY ThreeStones1029 						# 作者
-header-img: img/about_bg.jpg 	    #这篇文章标题背景图片
-catalog: true 						# 是否归档
-tags:	图像分割							#标签
----
-
 [TOC]
 
 # X线片分割
